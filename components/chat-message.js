@@ -1,38 +1,10 @@
-const {
-    GoogleGenerativeAI,
-    HarmCategory,
-    HarmBlockThreshold,
-  } = require("@google/generative-ai");
-  
-  const apiKey = process.env.GEMINI_API_KEY;
-  const genAI = new GoogleGenerativeAI(apiKey);
-  
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
-  });
-  
-  const generationConfig = {
-    temperature: 1,
-    topP: 0.95,
-    topK: 40,
-    maxOutputTokens: 8192,
-    responseMimeType: "text/plain",
-  };
-  
-//   async function run(text) {
-//     const chatSession = model.startChat({
-//       generationConfig,
-//       history: [
-//       ],
-//     });
-  
-//     const result = await chatSession.sendMessage(text);
-//     console.log(result.response.text());
-//   }
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const {apiKey}=require('./api-key');
 
-const chatSession = model.startChat({
-          generationConfig,
-          history: [
-          ],
-        });
-module.exports={chatSession,}
+const genAI = new GoogleGenerativeAI(apiKey);
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+module.exports={model};
+// const prompt = "Explain how AI works";
+
+// const result = await model.generateContent(prompt);
+// console.log(result.response.text());

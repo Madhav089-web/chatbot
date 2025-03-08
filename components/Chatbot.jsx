@@ -1,3 +1,5 @@
+import { apiKey } from './api-key';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useState } from 'react';
 import styles from '../styles/Chatbot.module.css';
 
@@ -10,17 +12,22 @@ const Chatbot = () => {
 
     const userMessage = { sender: 'user', text: input };
     setMessages([...messages, userMessage]);
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `${input}`;
+    const result = await model.generateContent(prompt);
 
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: input }),
-    });
 
-    const data = await response.json();
-    const botMessage = { sender: 'bot', text: data.result };
+    // const response = await fetch('/api/chat', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ message: input }),
+    // });
+
+    // const data = await response.json();
+    const botMessage = { sender: 'bot', text: result.response.text() };
 
     setMessages([...messages, userMessage, botMessage]);
     setInput('');
